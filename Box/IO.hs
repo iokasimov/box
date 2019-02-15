@@ -1,4 +1,4 @@
-module Pandora.Primary.IO (IO) where
+module Box.IO (IO) where
 
 import "pandora" Pandora.Core.Morphism ((.))
 import "pandora" Pandora.Pattern.Functor.Covariant (Covariant ((<$>)))
