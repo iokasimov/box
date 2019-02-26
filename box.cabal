@@ -24,7 +24,8 @@ library
     Box.Literals
     Box.Characters.Alphabet
     Box.Characters.Numeral
-    Box.Characters.ASCII
+    Box.Characters.Set.ASCII
+    Box.Characters.Characterize
   default-language: Haskell2010
   default-extensions:
     ExplicitNamespaces, MagicHash, NoImplicitPrelude, FlexibleInstances,
