@@ -18,7 +18,7 @@ source-repository head
   location: https://github.com/iokasimov/box.git
 
 library
-  build-depends: ghc-prim == 0.5.3, pandora == 0.1.*
+  build-depends: base, ghc-prim == 0.5.3, pandora == 0.1.*
   exposed-modules:
     Box.IO
     Box.Literals

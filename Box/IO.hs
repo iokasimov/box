@@ -1,5 +1,8 @@
-module Box.IO (IO) where
+module Box.IO (IO, putchar) where
 
+import "base" System.IO (putChar)
+import "ghc-prim" GHC.Prim (State#, RealWorld)
+import "ghc-prim" GHC.Types (IO (IO))
 import "pandora" Pandora.Core.Morphism ((.))
 import "pandora" Pandora.Pattern.Functor.Covariant (Covariant ((<$>)))
 import "pandora" Pandora.Pattern.Functor.Pointable (Pointable (point))
@@ -7,8 +10,7 @@ import "pandora" Pandora.Pattern.Functor.Applicative (Applicative ((<*>)))
 import "pandora" Pandora.Pattern.Functor.Bindable (Bindable ((>>=)))
 import "pandora" Pandora.Pattern.Functor.Monad (Monad)
 
-import "ghc-prim" GHC.Prim (State#, RealWorld)
-import "ghc-prim" GHC.Types (IO (IO))
+import Box.Characters.Characterize (Characterize (char))
 
 instance Covariant IO where
 	f <$> x = bindIO x (returnIO . f)
@@ -17,7 +19,7 @@ instance Pointable IO where
 	point = returnIO
 
 instance Applicative IO where
-	x <*> y = x >>= \x' -> y >>= \y' -> returnIO (x' y')
+	x <*> y = x >>= \x' -> y >>= returnIO . x'
 
 instance Bindable IO where
 	(>>=) = bindIO
@@ -35,3 +37,6 @@ thenIO (IO m) k = IO (\s -> case m s of (# new_s, _ #) -> unIO k new_s)
 
 unIO :: IO a -> (State# RealWorld -> (# State# RealWorld, a #))
 unIO (IO a) = a
+
+putchar :: Characterize a => a -> IO ()
+putchar = putChar . char

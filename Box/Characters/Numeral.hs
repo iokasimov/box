@@ -15,5 +15,3 @@ instance Characterize Arabic where
 	char A7 = '7'
 	char A8 = '8'
 	char A9 = '9'
-
--- data Roman = I | II | III | IV | V | VI | VII | VIII | IX | X | L | C | D | M

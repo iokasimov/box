@@ -1,6 +1,11 @@
 module Box.Characters.Characterize (Characterize (..)) where
 
-import "ghc-prim" GHC.Types (Char)
+import "pandora" Pandora.Core.Morphism (identity)
+
+import Box.Literals (Char)
 
 class Characterize a where
 	char :: a -> Char
+
+instance Characterize Char where
+	char = identity
