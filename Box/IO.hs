@@ -1,12 +1,13 @@
-module Box.IO (IO, putchar) where
+module Box.IO (IO, print) where
 
 import "base" System.IO (putChar)
 import "ghc-prim" GHC.Prim (State#, RealWorld)
 import "ghc-prim" GHC.Types (IO (IO))
 import "pandora" Pandora.Core.Morphism ((.))
-import "pandora" Pandora.Pattern.Functor.Covariant (Covariant ((<$>)))
+import "pandora" Pandora.Pattern.Functor.Covariant (Covariant ((<$>), void))
 import "pandora" Pandora.Pattern.Functor.Pointable (Pointable (point))
 import "pandora" Pandora.Pattern.Functor.Applicative (Applicative ((<*>)))
+import "pandora" Pandora.Pattern.Functor.Traversable (Traversable (traverse))
 import "pandora" Pandora.Pattern.Functor.Bindable (Bindable ((>>=)))
 import "pandora" Pandora.Pattern.Functor.Monad (Monad)
 
@@ -38,5 +39,9 @@ thenIO (IO m) k = IO (\s -> case m s of (# new_s, _ #) -> unIO k new_s)
 unIO :: IO a -> (State# RealWorld -> (# State# RealWorld, a #))
 unIO (IO a) = a
 
-putchar :: Characterize a => a -> IO ()
-putchar = putChar . char
+print :: (Characterize a, Traversable t) => t a -> IO ()
+print = void . traverse putc where
+
+	{-# INLINE putc #-}
+	putc :: Characterize a => a -> IO ()
+	putc = putChar . char
