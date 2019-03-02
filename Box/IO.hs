@@ -1,6 +1,6 @@
-module Box.IO (IO, print) where
+module Box.IO (IO, print, putc) where
 
-import "base" System.IO (putChar)
+import "base" System.IO (getChar, putChar)
 import "ghc-prim" GHC.Prim (State#, RealWorld)
 import "ghc-prim" GHC.Types (IO (IO))
 import "pandora" Pandora.Core.Morphism ((.))
@@ -12,6 +12,7 @@ import "pandora" Pandora.Pattern.Functor.Bindable (Bindable ((>>=)))
 import "pandora" Pandora.Pattern.Functor.Monad (Monad)
 
 import Box.Characters.Characterize (Characterize (char))
+import Box.Characters.Decharacterize (Decharacterize (dechar))
 
 instance Covariant IO where
 	f <$> x = bindIO x (returnIO . f)
@@ -40,8 +41,7 @@ unIO :: IO a -> (State# RealWorld -> (# State# RealWorld, a #))
 unIO (IO a) = a
 
 print :: (Characterize a, Traversable t) => t a -> IO ()
-print = void . traverse putc where
+print = void . traverse putc
 
-	{-# INLINE putc #-}
-	putc :: Characterize a => a -> IO ()
-	putc = putChar . char
+putc :: Characterize a => a -> IO ()
+putc = putChar . char
